@@ -19,19 +19,64 @@
 }
 
 #player {
-    width: 24px;
+    width: 32px;
     aspect-ratio: 16 / 20;
     background-image: url('images/characters/Character 1.png');
     background-size: 400% 400%;
     image-rendering: pixelated;
 
-    animation-name: down;
+    background-position: -100% 0%;
+
 }
 
 #player.animate {
     animation-duration: 1s;
     animation-timing-function: steps(4);
     animation-iteration-count: infinite;
+}
+
+#player.up {
+    background-position: 0% 300%;
+    animation-name: up;
+}
+
+@keyframes up {
+    from {
+        background-position: 0% 300%;
+    }
+    to {
+        background-position: -400% 300%;
+    }
+}
+
+
+
+#player.left {
+    background-position: 0% -200%;
+    animation-name: left;
+}
+
+@keyframes left {
+    from {
+        background-position: 0% -200%;
+    }
+    to {
+        background-position: -400% -200%;
+    }
+}
+
+#player.right {
+    background-position: 0% -300%;
+    animation-name: right;
+}
+
+@keyframes right {
+    from {
+        background-position: 0% -300%;
+    }
+    to {
+        background-position: -400% -300%;
+    }
 }
 
 #player.down {
@@ -48,44 +93,3 @@
     }
 }
 
-#player.up {
-    background-position: 0% 0%;
-    animation-name: up;
-}
-
-@keyframes up {
-    from {
-        background-position: -400% 0%;
-    }
-    to {
-        background-position: 0% -100%;
-    }
-}
-
-#player.right {
-    background-position: 0% 0%;
-    animation-name: right;
-}
-
-@keyframes right {
-    from {
-        background-position: -400% 0%;
-    }
-    to {
-        background-position: -100% 0%;
-    }
-}
-
-#player.left {
-    background-position: 0% 0%;
-    animation-name: left;
-}
-
-@keyframes left {
-    from {
-        background-position: -400% 0%;
-    }
-    to {
-        background-position: 100% 0%;
-    }
-}

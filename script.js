@@ -1,9 +1,20 @@
 "use strict";
-const player = {
-    x: 0, 
-    y: 0,
-    speed: 25
+window.addEventListener("load", start);
+
+function start() {
+    console.log("JavaScript is running");
+    requestAnimationFrame(tick);
+    document.addEventListener("keydown", keyDown);
+    document.addEventListener("keyup", keyUp);
 }
+/* MODEL */
+const player = {
+    x: 0,
+    y: 0,
+    speed: 100,
+    moving: false,
+    direction: undefined
+};
 
 const controls = {
     left: false,
@@ -12,65 +23,50 @@ const controls = {
     down: false
 }
 
-function handleKeyDown(event) {
-    switch(event.key) {
-        case 'a':
+// Lyt efter keydown hændelser
+function keyDown(event) {
+    switch(event.keyCode) {
+        case 37: // Venstre pil
             controls.left = true;
             break;
-        case 'd':
+        case 39: // Højre pil
             controls.right = true;
             break;
-        case 'w':
+        case 38: // Op pil
             controls.up = true;
             break;
-        case 's':
+        case 40: // Ned pil
             controls.down = true;
             break;
     }
 }
 
-function handleKeyUp(event) {
-    switch(event.key) {
-        case 'ArrowLeft':
+// Lyt efter keyup hændelser
+function keyUp(event) {
+    switch(event.keyCode) {
+        case 37: // Venstre pil
             controls.left = false;
             break;
-        case 'ArrowRight':
+        case 39: // Højre pil
             controls.right = false;
             break;
-        case 'ArrowUp':
+        case 38: // Op pil
             controls.up = false;
             break;
-        case 'ArrowDown':
+        case 40: // Ned pil
             controls.down = false;
             break;
     }
 }
 
-document.addEventListener('keydown', handleKeyDown);
-document.addEventListener('keyup', handleKeyUp);
-
-
-function start() {
-    console.log("JavaScript is running");
-
-    displayPlayerAtPosition();
-}
-
-
-function displayPlayerAtPosition() {
-    const visualPlayer = document.querySelector("#player");
-    visualPlayer.style.transform = `translate(${player.x}px ${player.y})`;
-}
-
 let lastTimestamp = 0;
+
 function tick(timestamp) {
     requestAnimationFrame(tick);
 
     const deltaTime = (timestamp - lastTimestamp) / 1000;
-    lastTimestamp = timestamp;
-
+    lastTimestamp = timestamp
     movePlayer(deltaTime);
-    
     displayPlayerAtPosition();
     displayPlayerAnimation();
 }
@@ -78,7 +74,7 @@ function tick(timestamp) {
 function displayPlayerAnimation() {
     const visualPlayer = document.querySelector("#player");
 
-    if(player.moving) {
+    if (player.moving) {
         visualPlayer.classList.add("animate");
         visualPlayer.classList.remove("up", "down", "left", "right");
         visualPlayer.classList.add(player.direction);
@@ -87,21 +83,26 @@ function displayPlayerAnimation() {
     }
 }
 
-function movePlayer() {
+function displayPlayerAtPosition() {
+    const visualPlayer = document.querySelector("#player");
+    visualPlayer.style.translate = `${player.x}px ${player.y}px`;
+}
+
+function movePlayer(deltaTime) {
     player.moving = false;
 
     const newPos = {
         x: player.x,
         y: player.y
     }
-
+    
     if (controls.left) {
         player.moving = true;
-        player.direction = "left";
+        player.direction = "left"
         newPos.x -= player.speed * deltaTime;
     } else if (controls.right) {
         player.moving = true;
-        player.direction = "right";
+        player.direction = "right"
         newPos.x += player.speed * deltaTime;
     }
 
@@ -111,8 +112,8 @@ function movePlayer() {
         newPos.y -= player.speed * deltaTime;
     } else if (controls.down) {
         player.moving = true;
-        player.direction = "down"
-        newPos.y += player.speed *deltaTime;
+        player.direction = "down";
+        newPos.y += player.speed * deltaTime;
     }
 
     if (canMoveTo(newPos)) {
@@ -122,9 +123,13 @@ function movePlayer() {
 }
 
 function canMoveTo(pos) {
-    if (pos.x < 0 || pos.y < 0) {
-        return false;
+    if (pos.x < 0 || pos.x > 484 ||
+        pos.y < 0 || pos.y > 340) {
+    return false;
     } else {
-    return true;
+        return true;
     }
 }
+
+
+
