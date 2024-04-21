@@ -8,8 +8,6 @@
     grid-area: 1 / 1;
     display: grid;
     grid-template-columns: repeat(var(--GRID_COLS), max-content);
-    grid-template-columns: repeat(var(--GRID_ROWS), max-content);
-
 }
 
 #background .tile {
@@ -96,6 +94,19 @@
     grid-template-rows: repeat(var(--GRID_ROWS), var(--TILE_SIZE));
 
 }
+
+.item {
+    width: var(--TILE_SIZE);
+    aspect-ratio: 1 / 1;
+    background-size: 100%;
+    image-rendering: pixelated;
+
+    grid-area: calc(var(--row) + 1) / calc(var(--col) + 1);
+  }
+  
+  .item.gold {
+    background-image: url(images/characters/items/gold.png);
+  }
 
 #characters {
     grid-area: 1 / 1;

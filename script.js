@@ -8,6 +8,7 @@ function start() {
     document.addEventListener("keydown", keyDown);
     document.addEventListener("keyup", keyUp);
     displayTiles();
+    createItems();
 }
 
 
@@ -15,8 +16,9 @@ const controls = {
     left: false,
     right: false,
     up: false,
-    down: false
-}
+    down: false,
+    use: false,
+};
 
 function keyDown(event) {
     switch(event.keyCode) {
@@ -57,13 +59,22 @@ let lastTimestamp = 0;
 
 function tick(timestamp) {
     requestAnimationFrame(tick);
+    
     const deltaTime = (timestamp - lastTimestamp) / 1000;
     lastTimestamp = timestamp
+    
     movePlayer(deltaTime);
+    
+    //checkForItems();
+    
     displayPlayerAtPosition();
     displayPlayerAnimation();
+    
     showDebugging();
+    
 }
+
+
 
 function createView() {
     const background = document.querySelector("#background");
@@ -169,6 +180,7 @@ function displayPlayerAnimation() {
 
 
 const player = {
+    isTaking: false,
     x: 40,
     y: 75,
     hitbox: {
@@ -225,12 +237,81 @@ const tiles = [
     [0,0,18,18,0,0,0,0,0,0,0,18,2,2,2,2,2,2,3,2,2,2,2]
 ]
 
+const itemsGrid = [
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0],
+    [0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  ]
+
+const visualItemsGrid = [];
+
 const GRID_COLS = tiles[0].length;
 const GRID_ROWS = tiles.length;
 const TILE_SIZE = 32;
 
 function getTileAtCoord({row, col}) {
     return tiles[row] [col];
+}
+
+function checkForItems() {
+    const items = getItemsUnderPlayer();
+    if(items.length > 0 && controls.use && !player.isTaking) {
+        console.log(`There are ${items.length} items under player!`);
+        items.forEach(takeItem);
+    }
+}
+
+function getItemsUnderPlayer() {
+    const items = [];
+    const coords = getTileAtCoord(player);
+
+    for(const coord of coords) {
+        const item = itemsGrid[coord.row][coord.col];
+        if(item !== 0) {
+            items.push(item);
+        }
+    }
+
+    return items;
+}
+
+function takeItem(coords) {
+    const itemValue = itemsGrid[coords.row][coords.col];
+
+    if(itemValue !== 0) {
+        itemsGrid[coords.row][coords.col] = 0;
+
+        const visualItem = visualItemsGrid[coords.row][coords.col];
+
+        visualItem.classList.add("take");
+    }
+}
+
+function createItems() {
+    const visualItems = document.querySelector("#items");
+
+    for (let row = 0; row < GRID_ROWS; row++) {
+        visualItemsGrid[row] = [];
+        for (let col = 0; col < GRID_COLS; col++) {
+            const modelItem = itemsGrid[row][col];
+            if (modelItem !== 0) {
+                const visualItem = document.createElement("div");
+                visualItem.classList.add("item");
+                visualItem.classList.add("gold");
+                visualItem.style.setProperty("--row", row);
+                visualItem.style.setProperty("--col", col);
+                visualItems.append(visualItem);
+
+                visualItemsGrid[row][col] = visualItem;
+            }
+        }
+    }
 }
 
 function coordFromPostion (object) {
