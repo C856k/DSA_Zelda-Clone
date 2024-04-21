@@ -62,11 +62,13 @@ function tick(timestamp) {
     movePlayer(deltaTime);
     displayPlayerAtPosition();
     displayPlayerAnimation();
-    //showDebugging();
+    showDebugging();
 }
 
 function createView() {
     const background = document.querySelector("#background");
+
+    const gamefield = document.querySelector("#gamefield")
     
 for(let row=0; row < GRID_ROWS; row++) {
     for(let col=0; col < GRID_COLS; col++) {
@@ -79,6 +81,10 @@ for(let row=0; row < GRID_ROWS; row++) {
 background.style.setProperty("--GRID_COLS", GRID_COLS);
 background.style.setProperty("--GRID_ROWS", GRID_ROWS);
 background.style.setProperty("--TILE_SIZE", TILE_SIZE + "px");
+
+gamefield.style.setProperty("--GRID_COLS", GRID_COLS);
+gamefield.style.setProperty("--GRID_ROWS", GRID_ROWS);
+gamefield.style.setProperty("--TILE_SIZE", TILE_SIZE + "px");
 }
 
 function displayTiles() {
@@ -287,6 +293,11 @@ function canMoveTo({x, y}) {
         case 3:
         case 7:
         case 8:
+        case 9:
+        case 13:
+        case 14:
+        case 15:
+        case 18:
                 return false;
     }
     return true

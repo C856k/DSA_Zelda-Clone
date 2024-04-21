@@ -8,6 +8,8 @@
     grid-area: 1 / 1;
     display: grid;
     grid-template-columns: repeat(var(--GRID_COLS), max-content);
+    grid-template-columns: repeat(var(--GRID_ROWS), max-content);
+
 }
 
 #background .tile {
@@ -86,11 +88,13 @@
 }
 
 
-
-
-
 #items {
     grid-area: 1 / 1;
+    display: grid;
+    position: relative;
+    grid-template-columns: repeat(var(--GRID_COLS), var(--TILE_SIZE));
+    grid-template-rows: repeat(var(--GRID_ROWS), var(--TILE_SIZE));
+
 }
 
 #characters {
@@ -100,7 +104,7 @@
 #player {
     width: 32px;
     aspect-ratio: 16 / 20;
-    background-image: url('images/characters/Character 8.png');
+    background-image: url('images/characters/Character 7.png');
     background-size: 400% 400%;
     image-rendering: pixelated;
 
